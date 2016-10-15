@@ -10,9 +10,8 @@
 
  \c has_many_blogs;
 
- \i scripts/blog_data.sql;
 
- DROP TABLE IF EXISTS users;
+ DROP TABLE IF EXISTS users CASCADE;
 
  CREATE TABLE users (
   id serial PRIMARY KEY,
@@ -23,7 +22,7 @@
   updated_at timestamp with time zone DEFAULT now()
   );
 
- DROP TABLE IF EXISTS posts;
+ DROP TABLE IF EXISTS posts CASCADE;
 
  CREATE TABLE posts (
   id serial PRIMARY KEY,
@@ -31,7 +30,8 @@
   url character varying(510) DEFAULT NULL,
   content text DEFAULT NULL,
   created_at timestamp with time zone DEFAULT now(),
-  updated_at timestamp with time zone DEFAULT now()
+  updated_at timestamp with time zone DEFAULT now(),
+  user_id integer REFERENCES users(id)
   );
 
  DROP TABLE IF EXISTS comments;
@@ -40,9 +40,12 @@
   id serial PRIMARY KEY,
   body character varying(510) DEFAULT NULL,
   created_at timestamp with time zone DEFAULT now(),
-  updated_at timestamp with time zone DEFAULT now()
+  updated_at timestamp with time zone DEFAULT now(),
+  user_id integer REFERENCES users(id),
+  posts_id integer REFERENCES posts(id)
   );
 
+ \i scripts/blog_data.sql;
 
 
 
